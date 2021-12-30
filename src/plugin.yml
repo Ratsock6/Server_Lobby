@@ -1,0 +1,4 @@
+name: ServerLobby
+author: Ratsock
+version: 1.0
+main: fr.ratsock.lobby.Lobby
