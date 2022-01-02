@@ -5,6 +5,7 @@ import fr.ratsock.api.mysql.PlayerInfo;
 import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.utils.head.HeadList;
 import fr.ratsock.lobby.utils.item.ItemBuilder;
+import fr.uhc.manager.game.Mode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,7 +32,7 @@ public class PlayerInteractInventory implements Listener {
 		if (it != null) {
 			if (it.getType() == Material.SKULL_ITEM) {
 				if (it.getItemMeta().getDisplayName().equals("§5§lProfil")) {
-					GUIprofil(player);
+					GUIMode(player);
 				}
 
 				if (it.getItemMeta().getDisplayName().equals("§e§lBoutique")) {
@@ -121,7 +122,7 @@ public class PlayerInteractInventory implements Listener {
 
 		nav.setItem(21, (new ItemBuilder(Material.GOLDEN_APPLE)).setName("§e§l♕ UHC Host").setLoreList(Arrays.asList("", "§c§l§kHEY§c§l Jeu Populaire §c§l§kYEH", "",  "", " §7Célèbre Battle Royal de minecraft,", " §7vous pouvez y jouer à des heures", " §7annoncé sur notre §9discord§7.", " §7avec de multiples §dcustomisations§7.", "", "§7§lJoueur(s) » §6§là faire", " ")).toItemStack());
 		nav.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lFermer").toItemStack());
-		nav.setItem(23, (new ItemBuilder(HeadList.RRUMBLE.getItemStack())).setName("PvP Box").setLoreList(Arrays.asList(" ", "§e§l★ §e§l§nType: PvP§e§l ★", "", "", " §7Soit le dernier survivant dans l'arène.", " §7A l'aide de tes compétances en §6§lPvP §7tue", " §7tout tes ennemis qui vont arriver §d1 par 1", " §7dans l'arène.", " ", "§7§lJoueur(s) » §6§là faire", "")).toItemStack());
+		nav.setItem(23, (new ItemBuilder(HeadList.RRUMBLE.getItemStack())).setName("§6§lPvP Box").setLoreList(Arrays.asList(" ", "§e§l★ §e§l§nType: PvP§e§l ★", "", "", " §7Soit le dernier survivant dans l'arène.", " §7A l'aide de tes compétances en §6§lPvP §7tue", " §7tout tes ennemis qui vont arriver §d1 par 1", " §7dans l'arène.", " ", "§7§lJoueur(s) » §6§là faire", "")).toItemStack());
 		nav.setItem(0, (new ItemBuilder(HeadList.HOST.getItemStack())).setName("§5§l☎ Création de serveurs hosts.").setLoreList(Arrays.asList(" ", "",  "", " §7Cliquez ici si vous voulez §5créer§7 un serveur", " §7en étant §dl'host§7 de la §6partie", " §7qui vous permettra de faire votre", " §econfiguation personnel§7.", "")).toItemStack());
 		nav.setItem(48, (new ItemBuilder(HeadList.SPAWN.getItemStack())).setName("§3§l► Spawn ◄").setLoreList(Arrays.asList(" ", "§6Clique si tu veux retourner au §a§lspawn§7.", "")).toItemStack());
 		nav.setItem(50, (new ItemBuilder(Material.FEATHER)).setName("§f§l► Jump ◄").setLoreList(Arrays.asList(" ", "§6Clique si tu veux te téléporter au §a§lJump§7.", "")).toItemStack());
@@ -182,6 +183,33 @@ public class PlayerInteractInventory implements Listener {
 		} else {
 			para.setItem(43, (new ItemBuilder(Material.FEATHER)).setName("§6§lVoler dans le Hub §e§l☀").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7la capacité de", " §7pouvoir voler dans le §dHub§7.", "", "   §7Activé", "   §c§lDésactivé §7§l「 §c§l✘ §7§l」", " ")).toItemStack());
 		}
+
+		player.openInventory(para);
+	}
+
+
+	public void GUIMode(Player player) {
+		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
+		PlayerInfo playerInfo = new PlayerInfo(player);
+		Inventory para = Bukkit.createInventory((InventoryHolder)null, 54, "§6§lParamètres");
+		int[] cases = new int[]{0, 1, 2, 6, 7, 8, 9, 17, 36, 44, 45, 46, 47, 53, 52, 51};
+		ItemStack i = (new ItemBuilder(Material.STAINED_GLASS_PANE, 1, API.getInstance().getStyle().getWindowColorPara())).setName("§b§k!!!!!").toItemStack();
+
+		for (int c : cases) {
+			para.setItem(c, i);
+		}
+		int[] cases_mode = new int[]{20 ,21, 22, 23, 29, 30, 31, 32, 38, 39, 40, 41};
+
+		int n = 20;
+		for(Mode mode : Mode.values()){
+			if(mode.isActive()){
+				para.setItem(n, (new ItemBuilder(mode.getItemStack())).setName(mode.getName()).setLore(mode.getDescription()).toItemStack());
+
+			}
+		}
+
+		para.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lRetour").toItemStack());
+
 
 		player.openInventory(para);
 	}
