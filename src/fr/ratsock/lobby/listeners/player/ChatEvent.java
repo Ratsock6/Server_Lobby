@@ -29,19 +29,20 @@ public class ChatEvent implements Listener {
 			return;
 		}
 
+		if(!playerInfo.isActivateChat()) {
+			player.sendMessage(Prefix.ERROR + "Tu as désactivé le chat.");
+			return;
+		}
+
 		for(Player players : Bukkit.getOnlinePlayers()){
-			PlayerInfo playersInfo = new PlayerInfo(player);
+			PlayerInfo playersInfo = new PlayerInfo(players);
 			if(!playersInfo.isActivateChat()) return;
+			System.out.println(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
 			if(playerInfo.getRank().getPower() >= 2){
-				System.out.println(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
 				players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
 				return;
 			}
 			players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + event.getMessage());
-			System.out.println(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + event.getMessage());
-
 		}
-
-		playerInfo.setModeMod(false, player);
 	}
 }

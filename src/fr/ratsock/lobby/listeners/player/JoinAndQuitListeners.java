@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 
@@ -21,7 +22,6 @@ public class JoinAndQuitListeners implements Listener {
 
 		player.setHealth(player.getMaxHealth());
 		player.setFoodLevel(20);
-		player.setAllowFlight(false);
 
 		Lobby instance = Lobby.getInstance();
 		event.setJoinMessage(null);
@@ -51,6 +51,8 @@ public class JoinAndQuitListeners implements Listener {
 
 		PlayerInfo playerInfo = new PlayerInfo(player);
 
+		playerInfo.setActivateFly(false, player);
+
 		if(playerInfo.getRank().getPower() >= 1){
 			Bukkit.broadcastMessage(Prefix.NEUTRAL + playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.GRAY + " vient de rejoindre le serveur !");
 		}
@@ -60,7 +62,7 @@ public class JoinAndQuitListeners implements Listener {
 				players.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1.0F, 1.0F);
 			}
 			player.getWorld().strikeLightningEffect(player.getLocation());
-			if(playerInfo.isActivateFly()) player.setAllowFlight(true);
+			playerInfo.setActivateFly(true, player);
 		}
 
 
@@ -76,11 +78,10 @@ public class JoinAndQuitListeners implements Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
-		Player p = event.getPlayer();
-		Lobby.getInstance().getScoreboardManager().onLogout(p);
+		Player player = event.getPlayer();
+		PlayerInfo playerInfo = new PlayerInfo(player);
+		playerInfo.setModeMod(false, player);
+		Lobby.getInstance().getScoreboardManager().onLogout(player);
 		event.setQuitMessage(null);
 	}
-
-
-
 }

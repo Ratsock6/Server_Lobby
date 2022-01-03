@@ -32,7 +32,7 @@ public class PlayerInteractInventory implements Listener {
 		if (it != null) {
 			if (it.getType() == Material.SKULL_ITEM) {
 				if (it.getItemMeta().getDisplayName().equals("§5§lProfil")) {
-					GUIMode(player);
+					GUIprofil(player);
 				}
 
 				if (it.getItemMeta().getDisplayName().equals("§e§lBoutique")) {
@@ -64,7 +64,7 @@ public class PlayerInteractInventory implements Listener {
 
 	public void GUIprofil(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
-		Inventory profil = Bukkit.createInventory((InventoryHolder)null, 54, "§5§lProfil");
+		Inventory profil = Bukkit.createInventory(null, 54, "§5§lProfil");
 		int[] cases = new int[]{0, 1, 2, 6, 7, 8, 9, 17, 36, 44, 45, 46, 47, 48, 49, 50, 53, 52, 51};
 		ItemStack i = (new ItemBuilder(Material.STAINED_GLASS_PANE, 1, API.getInstance().getStyle().getWindowColorProfil())).setName(API.getInstance().getStyle().getWindowName()).toItemStack();
 
@@ -156,7 +156,7 @@ public class PlayerInteractInventory implements Listener {
 		para.setItem(31, (new ItemBuilder(HeadList.LANGUE.getItemStack())).setName("§6§lLangue §e§l♚").setLoreList(Arrays.asList(" ", " ", " §7Permet de changer la §9§llangue", " §7sur serveur dans toute ça §e§lglobalité§7.", "", "   §9§lFr§f§lanç§c§lais §7「 §a§l✔ §7§l」", " ")).toItemStack());
 		para.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lRetour").toItemStack());
 
-		if(playerInfo.isActivateFriends()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
+		if(playerInfo.isActivateMsg()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
 		if(!playerInfo.isActivateMsg()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
 
 		if(playerInfo.isActivateFriends()) para.setItem(37, (new ItemBuilder(HeadList.AMI.getItemStack())).setName("§3§lRequête d'ami §d§l❤").setLoreList(Arrays.asList(" ", " ", " §7Permet de pouvoir §aactiver §7ou", " §7bien §cdésactiver §7les requêtes d'§damis", " §7que les joueurs vous envoie.", "", "   §a§lActivé §7「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
