@@ -188,6 +188,9 @@ public class PlayerInteractInventory implements Listener {
 	}
 
 
+	/*
+
+
 	public void GUIMode(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
 		PlayerInfo playerInfo = new PlayerInfo(player);
@@ -213,5 +216,7 @@ public class PlayerInteractInventory implements Listener {
 
 		player.openInventory(para);
 	}
+
+	 */
 
 }
