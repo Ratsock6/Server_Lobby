@@ -20,7 +20,7 @@ public class PlayerInventoryClick implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event){
-		if(!event.getClickedInventory().getTitle().equals("§3§lNavigation") && !event.getClickedInventory().getTitle().equals("§6§lParamètres") && !event.getClickedInventory().getTitle().equals("§e§lBoutique") && !event.getClickedInventory().getTitle().equals("§5§lProfil")) return;
+		if(!event.getClickedInventory().getTitle().equals("§3§lNavigation") && !event.getClickedInventory().getTitle().equals("§9§lStatistique") && !event.getClickedInventory().getTitle().equals("§6§lParamètres") && !event.getClickedInventory().getTitle().equals("§e§lBoutique") && !event.getClickedInventory().getTitle().equals("§5§lProfil")) return;
 		Player player = (Player)event.getWhoClicked();
 		ItemStack current = event.getCurrentItem();
 		PlayerInfo playerInfo = new PlayerInfo(player);
@@ -99,6 +99,11 @@ public class PlayerInventoryClick implements Listener {
 
 					if (current.getItemMeta().getDisplayName().equals("§e§lBoutique")) {
 						Lobby.getInstance().getPlayerInteract().GUIBoutique(player);
+						player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
+					}
+
+					if (current.getItemMeta().getDisplayName().equals("§9Statistique")) {
+						Lobby.getInstance().getPlayerInteract().GUIStatistique(player);
 						player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
 					}
 

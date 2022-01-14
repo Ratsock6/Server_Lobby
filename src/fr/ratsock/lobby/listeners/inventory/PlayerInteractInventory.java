@@ -1,15 +1,13 @@
 package fr.ratsock.lobby.listeners.inventory;
 
 import fr.ratsock.api.API;
+import fr.ratsock.api.mysql.OfflinePlayerInfo;
 import fr.ratsock.api.mysql.PlayerInfo;
 import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.utils.head.HeadList;
 import fr.ratsock.lobby.utils.item.ItemBuilder;
 import fr.uhc.manager.game.Mode;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +18,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlayerInteractInventory implements Listener {
@@ -76,15 +75,62 @@ public class PlayerInteractInventory implements Listener {
 
 		profil.setItem(21, (new ItemBuilder(HeadList.SOCIAL.getItemStack())).setName("§e§lSocial").setLoreList(Arrays.asList(" ", " ", " §7Permet de récuperer des informations", " §7sur vos §damis§7.", " ")).toItemStack());
 		profil.setItem(22, (new ItemBuilder(HeadList.COSMETIQUE.getItemStack())).setName("§3§lCosmétiques").setLoreList(Arrays.asList(" ", " ", " §7Accede aux menus des §dcosmétiques §7pour", " §7pimper ton personnage mais aussi", " §7accèder à des §6gadjets §7des plus farfelus.", " ")).toItemStack());
-		profil.setItem(23, (new ItemBuilder(HeadList.PROPOS.getItemStack())).setName("§9A Propos").setLoreList(Arrays.asList(" ", " ", " §7Permet de s'informer sur", " §7l'histoire du §bserveur §7et ses §epéripéties§7.", " ")).toItemStack());
+		profil.setItem(23, (new ItemBuilder(HeadList.PROPOS.getItemStack())).setName("§9Statistique").setLoreList(Arrays.asList(" ", " ", " §7Permet d'acceder à vos statistique", " §7en §6UHC §7et en §bPvP Box§7.", " ")).toItemStack());
 		profil.setItem(31, (new ItemBuilder(Material.SKULL_ITEM, 1, (byte)3)).setSkullOwner("yeshjho_").setName("§2§lVos succès").setLoreList(Arrays.asList(" ", " ", " §7Permet de se diriger vers vos §3succès§7", " §7sur le serveur.", " ")).toItemStack());
 		profil.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lRetour").toItemStack());
 		player.openInventory(profil);
 	}
 
+	public void GUIStatistique(Player player) {
+		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
+		Inventory stats = Bukkit.createInventory(null, 54, "§9§lStatistique");
+
+		int[] cases = new int[]{0, 1, 2, 6, 7, 8, 9, 17, 36, 44, 45, 46, 47, 53, 52, 51};
+		ItemStack i = (new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte)3)).setName("§b§k!!!!!").toItemStack();
+
+		for (int c : cases) {
+			stats.setItem(c, i);
+		}
+
+
+		cases = new int[]{13, 22, 31, 40};
+		i = (new ItemBuilder(Material.IRON_FENCE).setName("§b§k!!!!!").addEnchantment(Enchantment.DURABILITY, 0).addFlag(ItemFlag.HIDE_ENCHANTS).toItemStack());
+
+		for (int c : cases) {
+			stats.setItem(c, i);
+		}
+
+		infoGUI(stats, player);
+
+		stats.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lRetour").toItemStack());
+
+		OfflinePlayerInfo playerInfo = new OfflinePlayerInfo(player);
+
+		//Stats UHC
+		stats.setItem(11, new ItemBuilder(Material.GOLDEN_APPLE).setName("§dUHC").setLoreList(Arrays.asList("", "§e » Statistique ", "")).toItemStack());
+		stats.setItem(19, new ItemBuilder(Material.DIAMOND_ORE).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Diamant miné: " + ChatColor.AQUA + playerInfo.getDiamond()).toItemStack());
+		stats.setItem(20, new ItemBuilder(Material.GOLD_ORE).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Or miné: " + ChatColor.YELLOW + playerInfo.getGold()).toItemStack());
+		stats.setItem(21, new ItemBuilder(Material.IRON_ORE).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Fer miné: " + ChatColor.WHITE + playerInfo.getIron()).toItemStack());
+
+		stats.setItem(28, new ItemBuilder(Material.GOLD_SWORD).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Kill(s): " + ChatColor.RED + playerInfo.getKills()).toItemStack());
+		stats.setItem(29, new ItemBuilder(Material.SKULL_ITEM).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Mort(s): " + ChatColor.RED + playerInfo.getDeath()).toItemStack());
+		stats.setItem(30, new ItemBuilder(Material.ITEM_FRAME).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Games joué: " + ChatColor.WHITE + playerInfo.getGames()).toItemStack());
+
+		stats.setItem(38, new ItemBuilder(Material.GOLD_HELMET).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Victoire: " + ChatColor.GOLD + playerInfo.getWin()).toItemStack());
+
+		//Stats PvP Box
+		stats.setItem(15, new ItemBuilder(Material.DIAMOND_SWORD).addEnchantment(Enchantment.DURABILITY, 1).addFlag(ItemFlag.HIDE_ENCHANTS).setName("§bPvP Box").setLoreList(Arrays.asList("", "§e » Statistique ", "")).toItemStack());
+
+		stats.setItem(32, new ItemBuilder(Material.GOLD_SWORD).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Kill(s): " + ChatColor.RED + playerInfo.getKillsPvP_Box()).toItemStack());
+		stats.setItem(34, new ItemBuilder(Material.SKULL_ITEM).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Mort(s): " + ChatColor.RED + playerInfo.getDeathPvP_Box()).toItemStack());
+
+
+		player.openInventory(stats);
+	}
+
 	public void GUIBoutique(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
-		Inventory boutique = Bukkit.createInventory((InventoryHolder)null, 54, "§e§lBoutique");
+		Inventory boutique = Bukkit.createInventory(null, 54, "§e§lBoutique");
 
 		for (int i = 0; i < 52; i++) {
 			boutique.setItem(i, new ItemBuilder(Material.BARRIER).setName(ChatColor.RED + ChatColor.BOLD.toString() + "MAINTENANCE").toItemStack());
