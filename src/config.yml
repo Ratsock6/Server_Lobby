@@ -7,8 +7,8 @@ spawn:
   yaw: 0.0
 jump:
   world: world
-  x: 20
+  x: 0
   y: 160
-  z: 20
+  z: 0
   pitch: 0.0
   yaw: 0.0

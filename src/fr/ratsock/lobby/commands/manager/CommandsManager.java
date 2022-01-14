@@ -1,6 +1,7 @@
 package fr.ratsock.lobby.commands.manager;
 
 import fr.ratsock.api.utils.commands.CommandFramework;
+import fr.ratsock.lobby.commands.location.CommandsJump;
 import fr.ratsock.lobby.commands.location.CommandsSpawn;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,7 @@ public class CommandsManager {
 		framework = new CommandFramework(plugin);
 
 		registerNewCommand(new CommandsSpawn());
+		registerNewCommand(new CommandsJump());
 
 	}
 
