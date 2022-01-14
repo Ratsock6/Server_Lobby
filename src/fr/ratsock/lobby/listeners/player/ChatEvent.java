@@ -1,6 +1,5 @@
 package fr.ratsock.lobby.listeners.player;
 
-import fr.ratsock.api.API;
 import fr.ratsock.api.mysql.PlayerInfo;
 import fr.ratsock.api.style.Prefix;
 import org.bukkit.Bukkit;
@@ -36,13 +35,15 @@ public class ChatEvent implements Listener {
 
 		for(Player players : Bukkit.getOnlinePlayers()){
 			PlayerInfo playersInfo = new PlayerInfo(players);
-			if(!playersInfo.isActivateChat()) return;
-			System.out.println(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
-			if(playerInfo.getRank().getPower() >= 2){
-				players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
-				return;
+			if(playersInfo.isActivateChat()){
+				if(playerInfo.getRank().getPower() >= 2){
+					players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
+					continue;
+				}
+				players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + event.getMessage());
 			}
-			players.sendMessage(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + event.getMessage());
 		}
+
+		System.out.println(playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.DARK_GRAY + " » " + ChatColor.WHITE + event.getMessage());
 	}
 }

@@ -1,6 +1,7 @@
 package fr.ratsock.lobby.listeners.inventory;
 
 import com.google.common.io.ByteArrayDataOutput;
+import fr.ratsock.api.API;
 import fr.ratsock.api.mysql.PlayerInfo;
 import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.Lobby;
@@ -19,6 +20,7 @@ public class PlayerInventoryClick implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event){
+		if(!event.getClickedInventory().getTitle().equals("§3§lNavigation") && !event.getClickedInventory().getTitle().equals("§6§lParamètres") && !event.getClickedInventory().getTitle().equals("§e§lBoutique") && !event.getClickedInventory().getTitle().equals("§5§lProfil")) return;
 		Player player = (Player)event.getWhoClicked();
 		ItemStack current = event.getCurrentItem();
 		PlayerInfo playerInfo = new PlayerInfo(player);
@@ -26,8 +28,7 @@ public class PlayerInventoryClick implements Listener {
 			if (current.getType() != null) {
 				event.setCancelled(true);
 				if ((current.getType() == Material.ENDER_PEARL || current.getType() == Material.EYE_OF_ENDER) && current.getItemMeta().getDisplayName().contains("§9§lMode Modération §8§l┃")) {
-					playerInfo.setModeMod(!playerInfo.isModeMod(), player);
-
+					Bukkit.dispatchCommand(player, "mod");
 					Lobby.getInstance().getPlayerInteract().GUINav(player);
 				}
 

@@ -22,6 +22,7 @@ public class JoinAndQuitListeners implements Listener {
 
 		player.setHealth(player.getMaxHealth());
 		player.setFoodLevel(20);
+		player.getInventory().clear();
 
 		Lobby instance = Lobby.getInstance();
 		event.setJoinMessage(null);
