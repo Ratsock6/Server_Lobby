@@ -9,6 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="spigot" level="project" />
     <orderEntry type="library" name="[Server] API" level="project" />
-    <orderEntry type="library" name="UHC" level="project" />
+    <orderEntry type="library" name="[Server] Moderation" level="project" />
   </component>
 </module>

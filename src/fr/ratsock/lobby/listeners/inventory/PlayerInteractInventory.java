@@ -6,7 +6,6 @@ import fr.ratsock.api.mysql.PlayerInfo;
 import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.utils.head.HeadList;
 import fr.ratsock.lobby.utils.item.ItemBuilder;
-import fr.uhc.manager.game.Mode;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -119,7 +118,7 @@ public class PlayerInteractInventory implements Listener {
 		stats.setItem(38, new ItemBuilder(Material.GOLD_HELMET).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Victoire: " + ChatColor.GOLD + playerInfo.getWin()).toItemStack());
 
 		//Stats PvP Box
-		stats.setItem(15, new ItemBuilder(Material.DIAMOND_SWORD).addEnchantment(Enchantment.DURABILITY, 1).addFlag(ItemFlag.HIDE_ENCHANTS).setName("§bPvP Box").setLoreList(Arrays.asList("", "§e » Statistique ", "")).toItemStack());
+		stats.setItem(15, new ItemBuilder(Material.DIAMOND_SWORD).addEnchantment(Enchantment.DURABILITY, 1).addFlag(ItemFlag.HIDE_ENCHANTS).setName("§bArene").setLoreList(Arrays.asList("", "§e » Statistique ", "")).toItemStack());
 
 		stats.setItem(32, new ItemBuilder(Material.GOLD_SWORD).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Kill(s): " + ChatColor.RED + playerInfo.getKillsPvP_Box()).toItemStack());
 		stats.setItem(34, new ItemBuilder(Material.SKULL_ITEM).setName(API.getInstance().getStyle().getFirstColor() + " » " + API.getInstance().getStyle().getSecondColor() + "Mort(s): " + ChatColor.RED + playerInfo.getDeathPvP_Box()).toItemStack());
@@ -168,7 +167,7 @@ public class PlayerInteractInventory implements Listener {
 
 		nav.setItem(21, (new ItemBuilder(Material.GOLDEN_APPLE)).setName("§e§l♕ UHC Host").setLoreList(Arrays.asList("", "§c§l§kHEY§c§l Jeu Populaire §c§l§kYEH", "",  "", " §7Célèbre Battle Royal de minecraft,", " §7vous pouvez y jouer à des heures", " §7annoncé sur notre §9discord§7.", " §7avec de multiples §dcustomisations§7.", "", "§7§lJoueur(s) » §6§là faire", " ")).toItemStack());
 		nav.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lFermer").toItemStack());
-		nav.setItem(23, (new ItemBuilder(HeadList.RRUMBLE.getItemStack())).setName("§6§lPvP Box").setLoreList(Arrays.asList(" ", "§e§l★ §e§l§nType: PvP§e§l ★", "", "", " §7Soit le dernier survivant dans l'arène.", " §7A l'aide de tes compétances en §6§lPvP §7tue", " §7tout tes ennemis qui vont arriver §d1 par 1", " §7dans l'arène.", " ", "§7§lJoueur(s) » §6§là faire", "")).toItemStack());
+		nav.setItem(23, (new ItemBuilder(HeadList.RRUMBLE.getItemStack())).setName("§6§lArene").setLoreList(Arrays.asList(" ", "§e§l★ §e§l§nType: PvP§e§l ★", "", "", " §7Soit la personne avec le plus de kill.", " §7A l'aide de tes compétances en §6§lPvP §7tue", " §7tout tes ennemis qui vont arriver dans l'§darène§7.", " ", "§7§lJoueur(s) » §6§là faire", "")).toItemStack());
 		nav.setItem(0, (new ItemBuilder(HeadList.HOST.getItemStack())).setName("§5§l☎ Création de serveurs hosts.").setLoreList(Arrays.asList(" ", "",  "", " §7Cliquez ici si vous voulez §5créer§7 un serveur", " §7en étant §dl'host§7 de la §6partie", " §7qui vous permettra de faire votre", " §econfiguation personnel§7.", "")).toItemStack());
 		nav.setItem(48, (new ItemBuilder(HeadList.SPAWN.getItemStack())).setName("§3§l► Spawn ◄").setLoreList(Arrays.asList(" ", "§6Clique si tu veux retourner au §a§lspawn§7.", "")).toItemStack());
 		nav.setItem(50, (new ItemBuilder(Material.FEATHER)).setName("§f§l► Jump ◄").setLoreList(Arrays.asList(" ", "§6Clique si tu veux te téléporter au §a§lJump§7.", "")).toItemStack());
@@ -176,11 +175,7 @@ public class PlayerInteractInventory implements Listener {
 		nav.setItem(3, (new ItemBuilder(HeadList.BOUTIQUE.getItemStack())).setName("§e§lBoutique").toItemStack());
 		player.openInventory(nav);
 		if (playerInfo.getRank().getPower() == 10 || playerInfo.getRank().getPower() == 9 || playerInfo.getRank().getPower() >= 12) {
-			if (playerInfo.isModeMod()) {
-				nav.setItem(16, (new ItemBuilder(Material.EYE_OF_ENDER)).setName("§9§lMode Modération §8§l┃ §aActivé").toItemStack());
-			} else {
-				nav.setItem(16, (new ItemBuilder(Material.ENDER_PEARL)).setName("§9§lMode Modération §8§l┃ §cDésactivé").toItemStack());
-			}
+			nav.setItem(16, (new ItemBuilder(Material.EYE_OF_ENDER)).setName("§9§lMode Modération §8§l┃ " + (playerInfo.isModeMod() ? "§aActivé" : "§cDésactivé")).toItemStack());
 		}
 
 		player.updateInventory();
@@ -202,19 +197,12 @@ public class PlayerInteractInventory implements Listener {
 		para.setItem(31, (new ItemBuilder(HeadList.LANGUE.getItemStack())).setName("§6§lLangue §e§l♚").setLoreList(Arrays.asList(" ", " ", " §7Permet de changer la §9§llangue", " §7sur serveur dans toute ça §e§lglobalité§7.", "", "   §9§lFr§f§lanç§c§lais §7「 §a§l✔ §7§l」", " ")).toItemStack());
 		para.setItem(49, (new ItemBuilder(Material.BARRIER)).setName("§c§lRetour").toItemStack());
 
-		if(playerInfo.isActivateMsg()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
-		if(!playerInfo.isActivateMsg()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
 
-		if(playerInfo.isActivateFriends()) para.setItem(37, (new ItemBuilder(HeadList.AMI.getItemStack())).setName("§3§lRequête d'ami §d§l❤").setLoreList(Arrays.asList(" ", " ", " §7Permet de pouvoir §aactiver §7ou", " §7bien §cdésactiver §7les requêtes d'§damis", " §7que les joueurs vous envoie.", "", "   §a§lActivé §7「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
+		if(playerInfo.isActivateMsg()) para.setItem(23, (new ItemBuilder(Material.PAPER)).setName("§6§lMessage privé §e§l✉").setLoreList(Arrays.asList(" ", " ", " §7Permet de §cdésactiver §7ou bien", " §7d'§aactiver §7 les messages privée venant", " §7d'autre joueurs.", "", "   " + (playerInfo.isActivateMsg() ? "§a§lActivé §7§l「 §a§l✔ §7§l」" : "§7Activé"), "   " + (playerInfo.isActivateMsg() ? "§7Désactivé" : "§c§lDésactivé §7§l「 §c§l✘ §7§l」"), " ")).toItemStack());
 
-		if(!playerInfo.isActivateFriends()) para.setItem(37, (new ItemBuilder(HeadList.AMI.getItemStack())).setName("§3§lRequête d'ami §d§l❤").setLoreList(Arrays.asList(" ", " ", " §7Permet de pouvoir §aactiver §7ou", " §7bien §cdésactiver §7les requêtes d'§damis", " §7que les joueurs vous envoie.", "", "   §7Activé", "   §c§lDésactivé §7§l「 §c§l✘ §7§l」", " ")).toItemStack());
+		para.setItem(37, (new ItemBuilder(HeadList.AMI.getItemStack())).setName("§3§lRequête d'ami §d§l❤").setLoreList(Arrays.asList(" ", " ", " §7Permet de pouvoir §aactiver §7ou", " §7bien §cdésactiver §7les requêtes d'§damis", " §7que les joueurs vous envoie.", "", "   " + (playerInfo.isActivateFriends() ? "§a§lActivé §7§l「 §a§l✔ §7§l」" : "§7Activé"), "   " + (playerInfo.isActivateFriends() ? "§7Désactivé" : "§c§lDésactivé §7§l「 §c§l✘ §7§l」"), " ")).toItemStack());
 
-
-		if (playerInfo.isActivateChat()) {
-			para.setItem(21, (new ItemBuilder(Material.BOOK)).setName("§6§lChat §e§l✎").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7le chat du lobby.", "", "   §a§lActivé §7§l「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
-		} else {
-			para.setItem(21, (new ItemBuilder(Material.BOOK)).setName("§6§lChat §e§l✎").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7le chat du lobby.", "", "   §7Activé", "   §c§lDésactivé §7§l「 §c§l✘ §7§l」", " ")).toItemStack());
-		}
+		para.setItem(21, (new ItemBuilder(Material.BOOK)).setName("§6§lChat §e§l✎").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7le chat du lobby.", "", "   " + (playerInfo.isActivateChat() ? "§a§lActivé §7§l「 §a§l✔ §7§l」" : "§7Activé"), "   " + (playerInfo.isActivateChat() ? "§7Désactivé" : "§c§lDésactivé §7§l「 §c§l✘ §7§l」"), " ")).toItemStack());
 
 		if (playerInfo.getSpeed() == 0) para.setItem(16, (new ItemBuilder(Material.SUGAR)).setName("§6§lVitesse §e§l♞").setLoreList(Arrays.asList(" ", " ", " §7Permet de modifier la §bvitesse à la quel", " §7vous courrez dans le §dHub§7.", "", "   §7Vitesse » I", "   §7Vitesse » II", "   §7Vitesse » III", "   §c§lDésactivé §7§l「 §c§l✘ §7§l」", " ")).toItemStack());
 
@@ -224,11 +212,7 @@ public class PlayerInteractInventory implements Listener {
 
 		if (playerInfo.getSpeed() == 3) para.setItem(16, (new ItemBuilder(Material.SUGAR)).setName("§6§lVitesse §e§l♞").setLoreList(Arrays.asList(" ", " ", " §7Permet de modifier la §bvitesse à la quel", " §7vous courrez dans le §dHub§7.", "", "   §7Vitesse » I", "   §7Vitesse » II", "   §7Vitesse » §a§lIII §7「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
 
-		if (playerInfo.isActivateFly()) {
-			para.setItem(43, (new ItemBuilder(Material.FEATHER)).setName("§6§lVoler dans le Hub §e§l☀").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7la capacité de", " §7pouvoir voler dans le §dHub§7.", "", "   §a§lActivé §7「 §a§l✔ §7§l」", "   §7Désactivé", " ")).toItemStack());
-		} else {
-			para.setItem(43, (new ItemBuilder(Material.FEATHER)).setName("§6§lVoler dans le Hub §e§l☀").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7la capacité de", " §7pouvoir voler dans le §dHub§7.", "", "   §7Activé", "   §c§lDésactivé §7§l「 §c§l✘ §7§l」", " ")).toItemStack());
-		}
+		para.setItem(43, (new ItemBuilder(Material.FEATHER)).setName("§6§lVoler dans le Hub §e§l☀").setLoreList(Arrays.asList(" ", " ", " §7Permet de d'§aactiver §7ou bien", " §cdésactiver §7la capacité de", " §7pouvoir voler dans le §dHub§7.", "", "   " + (playerInfo.isActivateFly() ? "§a§lActivé §7§l「 §a§l✔ §7§l」" : "§7Activé"), "   " + (playerInfo.isActivateFly() ? "§7Désactivé" : "§c§lDésactivé §7§l「 §c§l✘ §7§l」"), " ")).toItemStack());
 
 		player.openInventory(para);
 	}

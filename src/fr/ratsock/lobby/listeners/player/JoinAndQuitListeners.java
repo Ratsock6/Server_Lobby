@@ -1,16 +1,17 @@
 package fr.ratsock.lobby.listeners.player;
 
 import fr.ratsock.api.API;
-import fr.ratsock.api.mysql.PlayerInfo;
+import fr.ratsock.api.mysql.OfflinePlayerInfo;
+import fr.ratsock.api.mysql.RankEnums;
 import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.Lobby;
 import fr.ratsock.lobby.utils.item.ItemBuilder;
+import fr.ratsock.moderation.Moderation;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 
@@ -50,9 +51,14 @@ public class JoinAndQuitListeners implements Listener {
 		player.sendMessage("       §6§l» §b/liens");
 		player.sendMessage(" ");
 
-		PlayerInfo playerInfo = new PlayerInfo(player);
 
-		playerInfo.setActivateFly(false, player);
+		OfflinePlayerInfo playerInfo = new OfflinePlayerInfo(player);
+		if(playerInfo.isModeMod()){
+			Moderation.getInstance().getCommandsMod().allowMod(player);
+			return;
+		}
+
+		if(playerInfo.getRank() == RankEnums.PLAYER) playerInfo.setActivateFly(false, player);
 
 		if(playerInfo.getRank().getPower() >= 1){
 			Bukkit.broadcastMessage(Prefix.NEUTRAL + playerInfo.getRank().getDisplayname() + " " + player.getName() + ChatColor.GRAY + " vient de rejoindre le serveur !");
@@ -63,7 +69,6 @@ public class JoinAndQuitListeners implements Listener {
 				players.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1.0F, 1.0F);
 			}
 			player.getWorld().strikeLightningEffect(player.getLocation());
-			playerInfo.setActivateFly(true, player);
 		}
 
 
@@ -80,8 +85,6 @@ public class JoinAndQuitListeners implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
-		PlayerInfo playerInfo = new PlayerInfo(player);
-		playerInfo.setModeMod(false, player);
 		Lobby.getInstance().getScoreboardManager().onLogout(player);
 		event.setQuitMessage(null);
 	}
