@@ -7,6 +7,10 @@ import fr.ratsock.api.style.Prefix;
 import fr.ratsock.lobby.Lobby;
 import fr.ratsock.lobby.utils.item.ItemBuilder;
 import fr.ratsock.moderation.Moderation;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,7 +55,6 @@ public class JoinAndQuitListeners implements Listener {
 		player.sendMessage("       §6§l» §b/liens");
 		player.sendMessage(" ");
 
-
 		OfflinePlayerInfo playerInfo = new OfflinePlayerInfo(player);
 		if(playerInfo.isModeMod()){
 			Moderation.getInstance().getCommandsMod().allowMod(player);
@@ -73,11 +76,6 @@ public class JoinAndQuitListeners implements Listener {
 
 
 		API.getInstance().getApiUtils().getScoreboard().getTeam(playerInfo.getRank().getOrdername()).addPlayer(player);
-
-
-
-
-
 
 	}
 

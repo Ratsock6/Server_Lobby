@@ -155,7 +155,7 @@ public class PlayerInteractInventory implements Listener {
 	public void GUINav(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1.0F, 1.0F);
 		PlayerInfo playerInfo = new PlayerInfo(player);
-		Inventory nav = Bukkit.createInventory((InventoryHolder)null, 54, "§3§lNavigation");
+		Inventory nav = Bukkit.createInventory(null, 54, "§3§lNavigation");
 		int[] cases = new int[]{1, 2, 6, 7, 8, 9, 17, 36, 44, 45, 46, 47, 53, 52, 51};
 		ItemStack i = (new ItemBuilder(Material.STAINED_GLASS_PANE, 1, API.getInstance().getStyle().getWindowColorNav())).setName("§b§k!!!!!").toItemStack();
 
